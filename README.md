@@ -4,9 +4,9 @@ PASSO A PASSO PARA RODAR COM DOCKER
 
 1 - Clone o projeto e acesse o diretorio 
 
-git clone https://github.com/TargetXXX/DevManager1.git
+git clone https://github.com/TargetXXX/DevManager.git
 
-cd DevManager1
+cd DevManager
 
 2 - Suba para o docker
 
