@@ -1,0 +1,47 @@
+services:
+  backend:
+    build: ./backend
+    working_dir: /var/www
+    volumes:
+      - ./backend:/var/www
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+    command: sh -c "composer install && php artisan migrate:fresh && php artisan db:seed && php artisan serve --host=0.0.0.0 --port=8000"
+
+  db:
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: devmanager
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  frontend:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+    depends_on:
+      - db
+
+volumes:
+  dbdata:

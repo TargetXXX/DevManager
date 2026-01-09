@@ -1,0 +1,12 @@
+.avatarHover {
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
+    border: 2px solid transparent;
+}
+
+.avatarHover:hover {
+    transform: scale(1.15); 
+    border-color: #1677ff !important;
+    box-shadow: 0 0 10px rgba(22, 119, 255, 0.5);
+    filter: brightness(1.1);
+}
