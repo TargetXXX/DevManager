@@ -2,8 +2,9 @@ export type Nivel = {
   id: number;
   nivel: string;
   devs_count?: number;
-  created_at?: string;
   permissions?: string[];
+  created_at?: string;
+  updated_at?: string;
 };
 
 export type Dev = {
@@ -19,6 +20,8 @@ export type Dev = {
   email: string;
   first_login?: boolean;
   permissions?: string[] | string;
+  created_at?: string;
+  updated_at?: string;
 };
 
 export type Meta = {
@@ -41,4 +44,12 @@ export type LoginResponse = {
 
 export type ApiError = {
   error: string;
+};
+
+export type DashboardStats = {
+  total_devs: number;
+  total_niveis: number;
+  nivel_com_mais_devs?: Nivel;
+  ultimo_dev?: Dev;
+  ultimo_nivel?: Nivel;
 };

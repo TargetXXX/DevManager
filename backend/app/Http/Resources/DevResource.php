@@ -25,6 +25,8 @@ class DevResource extends JsonResource
             'hobby' => $this->hobby,
             'nivel' => new NivelResource($this->whenLoaded('nivel')),
             'first_login' => $this->first_login,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

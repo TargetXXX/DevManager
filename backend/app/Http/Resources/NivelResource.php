@@ -21,6 +21,7 @@ class NivelResource extends JsonResource
                 return $this->devs->count();
             }),
             'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'permissions' => $this->getPermissions(),
         ];
     }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DevController;
 use App\Http\Controllers\NivelController;
 use App\Enum\Permission;
@@ -14,6 +15,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('niveis', NivelController::class);
     Route::apiResource('desenvolvedores', DevController::class);
     Route::post('/auth/checktoken', [AuthController::class, 'isExpired']);
+    Route::get('/dashboard/stats', [DashboardController::class, 'dashboardStats']);
 });
 
 Route::post('/auth/login', [AuthController::class, 'login']);

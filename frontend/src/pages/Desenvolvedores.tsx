@@ -32,6 +32,7 @@ import dayjs from "dayjs";
 import ImgCrop from "antd-img-crop";
 import { useAuth } from "../contexts/AuthContext";
 import { toBase64 } from "../utils/Utils";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type TableParams = {
   pagination?: TablePaginationConfig;
@@ -78,7 +79,9 @@ export default function DevTable() {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [form] = Form.useForm();
-
+  const [firstLoadDone, setFirstLoadDone] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
   const { dev } = useAuth();
 
   const [tableParams, setTableParams] = useState<TableParams>({
@@ -99,6 +102,21 @@ export default function DevTable() {
     tableParams.sortOrder,
     JSON.stringify(tableParams.filters),
   ]);
+
+  useEffect(() => {
+
+    if (!firstLoadDone || loading) return;
+
+    if(location.hash === "#new") {
+      handleCreate();
+      navigate(location.pathname, { replace: true });
+    }
+    if(location.hash.startsWith("#edit")) {
+      const id = parseInt(location.hash.split(":")[1]);
+      handleEdit(id ? data.find(d => d.id === id) as Dev : null);
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location.hash, loading, firstLoadDone]);
 
   useEffect(() => {
     fetchNiveis();
@@ -126,24 +144,56 @@ export default function DevTable() {
     }
   }
 
-  function handleEdit(dev: Dev) {
+  function handleEdit(devE: Dev|null) {
+
+    if(!devE) {
+      notification.error({
+        message: "Desenvolvedor não encontrado para edição.",
+      });
+      return;
+    }
+
+    if(!dev?.nivel?.permissions?.includes("update")) {
+      notification.error({
+        message: "Você nao tem permissao para editar desenvolvedores.",
+      });
+      return;
+    }
+
+    if(dev.id === devE.id) {
+      notification.error({
+        message: "Você nao pode editar a si mesmo por aqui.",
+      });
+      return;
+    }
+
     form.resetFields();
     setAvatarPreview(null);
-    setCurrentDev(dev);
+    setCurrentDev(devE);
     setEditModal(true);
 
     form.setFieldsValue({
-      id: dev.id,
-      email: dev.email,
-      nome: dev.nome,
-      sexo: dev.sexo,
-      hobby: dev.hobby,
-      nivel_id: dev.nivel?.id,
-      data_nascimento: dayjs(dev.data_nascimento),
+      id: devE.id,
+      email: devE.email,
+      nome: devE.nome,
+      sexo: devE.sexo,
+      hobby: devE.hobby,
+      nivel_id: devE.nivel?.id,
+      data_nascimento: dayjs(devE.data_nascimento),
     });
+
+    
   }
 
   function handleCreate() {
+
+    if(!dev?.nivel?.permissions?.includes("create")) {
+      notification.error({
+        message: "Você nao tem permissao para criar desenvolvedores.",
+      });
+      return;
+    }
+
     form.resetFields();
     setAvatarPreview(null);
     setAvatarFile(null);
@@ -386,6 +436,7 @@ export default function DevTable() {
       const req = await api.get(`/desenvolvedores?${queryString}`);
       const datad: ApiResponse = req.data;
       fillTable(datad);
+      setFirstLoadDone(true);
     } catch (error: any) {
       if (error.response && error.response.status === 404) {
         notification.error({ message: "Nenhum desenvolvedor encontrado." });
@@ -413,11 +464,7 @@ export default function DevTable() {
   async function fetchNiveis() {
     setLoading(true);
 
-    if (
-      !dev?.nivel?.permissions?.includes("read") &&
-      !dev?.nivel?.permissions?.includes("create")
-    )
-      return;
+    if (!dev?.nivel?.permissions?.includes("read") && !dev?.nivel?.permissions?.includes("create")) return;
 
     try {
       const res = await api.get("/niveis");

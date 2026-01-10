@@ -11,7 +11,7 @@ import type { ApiResponse, Nivel } from "../types/dev";
 import { DeleteFilled, EditFilled, FileAddFilled, ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { confirmDelete } from "../utils/Swal";
 import { useAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 type TableParams = {
@@ -64,6 +64,8 @@ export default function NivelTable() {
     const [currentNivel, setCurrentNivel] = useState<Nivel | null>(null);
     const [form] = Form.useForm();
     const [permissions, setPermissions] = useState<String[] | null>(null);
+    const location = useLocation();
+    const [firstLoadDone, setFirstLoadDone] = useState(false);
 
     const {dev} = useAuth();
 
@@ -104,6 +106,23 @@ export default function NivelTable() {
         }
     }, []);
 
+    useEffect(() => {
+
+        if (!firstLoadDone || loading) return;
+
+        if(location.hash === "#new") {
+            handleCreate();
+            navigate(location.pathname, { replace: true });
+        }
+        if(location.hash.startsWith("#edit")) {
+            if(loading) return;
+
+            const id = parseInt(location.hash.split(":")[1]);
+            handleEdit(id ? data.find(d => d.id === id) as Nivel : null);
+            navigate(location.pathname, { replace: true });
+        }
+    }, [location.hash, loading]);
+
     async function handleDeleteNivel(id: number) {
         try {
             setLoading(true);
@@ -118,7 +137,30 @@ export default function NivelTable() {
         }
     }
 
-    function handleEdit(nivel: Nivel) {
+    function handleEdit(nivel: Nivel|null) {
+
+
+        if(!nivel) {
+            notification.error({
+                message: "Nível não encontrado para edição.",
+            });
+            return;
+        }
+
+        if(!dev?.nivel?.permissions?.includes("update")) {
+            notification.error({
+                message: "Você nao tem permissao para editar niveis.",
+            });
+            return;
+        }
+
+        if(dev?.nivel?.id === nivel.id) {
+            notification.error({
+                message: "Voce nao pode editar o nivel associado ao seu usuario.",
+            });
+            return;
+        }
+
         form.resetFields();
         setCurrentNivel(nivel);
         setEditModal(true);
@@ -131,6 +173,15 @@ export default function NivelTable() {
     }
 
     function handleCreate() {
+
+
+        if(!dev?.nivel?.permissions?.includes("create")) {
+            notification.error({
+                message: "Você nao tem permissao para criar niveis.",
+            });
+            return;
+        }
+
         form.resetFields();
         setCurrentNivel(null);
         setEditModal(true);
@@ -274,7 +325,7 @@ export default function NivelTable() {
             const req = await api.get(`/niveis?${queryString}`);
             const datad: ApiResponse = req.data;
             fillTable(datad);
-
+            setFirstLoadDone(true);
         } catch (error: any) {
             
             if(error.response && error.response.status === 404) { 

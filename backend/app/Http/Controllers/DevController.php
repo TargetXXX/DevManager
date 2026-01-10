@@ -166,6 +166,10 @@ class DevController extends Controller
         if (!$dev)
             return response()->json(['error' => 'Desenvolvedor não encontrado'], 404);
 
+        if (auth()->user()->id === $dev->id) {
+            return response()->json(['error' => 'Você não pode deletar seu próprio usuário'], 403);
+        }
+
         $dev->delete();
 
         return response()->noContent();
