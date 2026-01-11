@@ -71,9 +71,9 @@ Sistema de tokens e expiração da sessao caso logado em outra instancia.
 
 Confirmação de exclusão de desenvolvedor e nivel pelo sweetalert.
 
-Modal para criação de desenvolvedor.
+Modal para criação de desenvolvedor e nivel.
 
-Modal para edição de desenvolvedor.
+Modal para edição de desenvolvedor e nivel.
 
 Ordenação de tabelas clicando no nome.
 
