@@ -2,7 +2,7 @@ Crud de desenvolvedores e niveis
 
 PASSO A PASSO PARA RODAR COM DOCKER
 
-1 - Clone o projeto e acesse o diretorio 
+1 - Clone o projeto e acesse o diretorio
 
 git clone https://github.com/TargetXXX/DevManager.git
 
@@ -12,10 +12,10 @@ cd DevManager
 
 docker-compose up -d --build
 
-3 - No backend gere uma key para segurança
+3 - No backend execute
 
-cd backend
-
+docker-compose exec backend php artisan migrate:fresh
+docker-compose exec backend php artisan db:seed
 docker-compose exec backend php artisan key:generate
 
 O sistema possui um seeder automatico como administrador do sistema
@@ -36,7 +36,6 @@ SweetAlert |
 Axios
 
 Funcionalidades:
-
 
 Listagem, edição, exclusão e criação de desenvolvedores.
 
@@ -81,6 +80,3 @@ Validacao de campos.
 Mensagens de feedback (Toast notification).
 
 Disponibilização via docker.
-
-
-
