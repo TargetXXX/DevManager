@@ -15,7 +15,9 @@ docker-compose up -d --build
 3 - No backend execute
 
 docker-compose exec backend php artisan migrate:fresh
+
 docker-compose exec backend php artisan db:seed
+
 docker-compose exec backend php artisan key:generate
 
 O sistema possui um seeder automatico como administrador do sistema
