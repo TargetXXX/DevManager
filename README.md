@@ -118,13 +118,13 @@ docker-compose exec backend php artisan key:generate]
 
 ### ✅ O sistema possui um seeder automático criando um administrador do sistema.
 
-###👤 Credenciais do Administrador (Seeder)
+### 👤 Credenciais do Administrador (Seeder)
 
 - Email: admin@admin.com
 
 - Senha: admin123
 
-###📎 Regras Importantes
+### 📎 Regras Importantes
 
 - Níveis não podem ser excluídos se estiverem associados a algum desenvolvedor.
 
@@ -132,7 +132,7 @@ docker-compose exec backend php artisan key:generate]
 
 - No primeiro login, o sistema obriga a troca de senha.
 
-###🔒 Notas de Segurança
+### 🔒 Notas de Segurança
 
 - Em ambiente de produção, altere:
 
