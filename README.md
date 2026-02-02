@@ -11,7 +11,7 @@ CRUD completo para gerenciamento de **Desenvolvedores** e **Níveis**, com auten
 - Bibliotecas do Frontend
 - Funcionalidades
 - Pré-requisitos
-- 🚀 Rodando com Docker (Passo a Passo)
+- Rodando com Docker (Passo a Passo)
 - Credenciais do Administrador (Seeder)
 - Regras Importantes
 - Notas de Segurança
@@ -116,29 +116,29 @@ docker-compose exec backend php artisan db:seed
 docker-compose exec backend php artisan key:generate]
 ```
 
-## ✅ O sistema possui um seeder automático criando um administrador do sistema.
+### ✅ O sistema possui um seeder automático criando um administrador do sistema.
 
-##👤 Credenciais do Administrador (Seeder)
+###👤 Credenciais do Administrador (Seeder)
 
-### Email: admin@admin.com
+- Email: admin@admin.com
 
-### Senha: admin123
+- Senha: admin123
 
-##📎 Regras Importantes
+###📎 Regras Importantes
 
-###Níveis não podem ser excluídos se estiverem associados a algum desenvolvedor.
+- Níveis não podem ser excluídos se estiverem associados a algum desenvolvedor.
 
-###Todo usuário novo começa com senha padrão admin123.
+- Todo usuário novo começa com senha padrão admin123.
 
-###No primeiro login, o sistema obriga a troca de senha.
+- No primeiro login, o sistema obriga a troca de senha.
 
-##🔒 Notas de Segurança
+###🔒 Notas de Segurança
 
-###Em ambiente de produção, altere:
+- Em ambiente de produção, altere:
 
-###credenciais padrão
+- credenciais padrão
 
-###variáveis de ambiente
+- variáveis de ambiente
 
 ###configurações de token e expiração
 
