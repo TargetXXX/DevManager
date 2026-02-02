@@ -140,6 +140,6 @@ docker-compose exec backend php artisan key:generate]
 
 - variáveis de ambiente
 
-###configurações de token e expiração
+- configurações de token e expiração
 
-###Evite manter a senha padrão em ambientes públicos.
+- Evite manter a senha padrão em ambientes públicos.
